@@ -5,6 +5,6 @@ import { reducer as formReducer } from 'redux-form';
 
 export default combineReducers({
     list: list_reducer,
-    form: formReducer
+    form: formReducer,
 });
 
