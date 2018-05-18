@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getSingleItem, toggleItemComplete } from '../actions';
+import * as actions from '../actions';
 import { Link } from 'react-router-dom';
 
 class SingleItem extends Component {
@@ -8,8 +8,18 @@ class SingleItem extends Component {
         this.props.getSingleItem(this.props.match.params.id);
     }
 
+    componentWillUnmount() {
+        this.props.clearSingleItem();
+    }
+
     handleToggleComplete() {
         this.props.toggleItemComplete(this.props.match.params.id);
+    }
+
+    async handleDeleteItem() {
+        await this.props.deleteItem(this.props.match.params.id);
+
+        this.props.history.push('/');
     }
 
     render() {
@@ -28,6 +38,10 @@ class SingleItem extends Component {
                         {complete ? 'In Progress' : 'Complete Item'}
                     </button>
                     <Link to="/" className="btn blue">View Full List</Link>
+                    <button onClick={this.handleDeleteItem.bind(this)}
+                        className={"btn darken-2 red"}>
+                        Delete Item
+                    </button>
                 </div>
             </div>
         )
@@ -42,4 +56,4 @@ function mapStateToProps(state) {
 
 //second argument for connect is an action creator that returns an action, and that action is an object
 
-export default connect(mapStateToProps, { getSingleItem, toggleItemComplete })(SingleItem);
+export default connect(mapStateToProps, actions)(SingleItem);
